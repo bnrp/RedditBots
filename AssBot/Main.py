@@ -50,11 +50,15 @@ def scan():
             #DO STUFF HERE    
             if match:
                 word1 = match.group(1)
+                
+                if word1 is 'fat' or word1 is 'half':
+                    continue
+                
                 word2 = match.group(2)
                 
                 if word2 = 'it':
                     continue
-                
+                    
                 print(match.group())
                 print(cbody)
                 cbody = cbody.replace(match.group() ,"**"+word1+" ass-"+word2+"**")
