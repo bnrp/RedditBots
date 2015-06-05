@@ -12,7 +12,7 @@ try:
     PASSWORD = Config.PASSWORD
     USERAGENT = Config.USERAGENT
     MAXPOSTS = Config.MAXPOSTS
-    
+    SUBREDDIT = 'fusion_gaming'
     print("Loaded Config")
 except ImportError:
     print("Error Importing Config.py")
@@ -29,27 +29,37 @@ print('Loaded SQL Database')
 sql.commit()
  
 def scan():
-    stream = praw.helpers.comment_stream(r, 'fusion_gaming')
-    for comment in stream:
+    print('Searching %s.' % SUBREDDIT)
+    subreddit = r.get_subreddit(SUBREDDIT)
+    comments = subreddit.get_comments(limit=MAXPOSTS)
+    
+    for comment in comments:
     
         cbody = comment.body
         cid = comment.id
         
+        cauthor = comment.author
+        if cauthor is 'TheAssBot':
+            continue
+        
+        match = re.search(SUMMONTEXT, cbody)
+        if not match:
+            continue
                 
         cur.execute('SELECT * FROM posts WHERE CID=?', [cid])
         if not cur.fetchone():
             print("Found a summon comment")
             
-            #DO STUFF HERE	
-			match = re.search(SUMMONTEXT, cbody)
-			if match:
-				word1 = match.group(1)
-				word2 = match.group(2)
-				
-				cbody.replace(group(0), word1+" ass-"+word2)
-			else:
-				continue
-				
+            #DO STUFF HERE    
+            if match:
+                word1 = match.group(1)
+                word2 = match.group(2)
+                
+                print(match.group(0))
+                cbody.replace(match.group() , word1+" ass-"+word2)
+            else:
+                continue
+                
             print('Replying to ' + cid)
             comment.reply(cbody)
             
@@ -64,5 +74,5 @@ while True:
         scan()
     except Exception as e:
         print("ERR", e)
-    print('Sleeping ' + str(WAIT))
+        print('Sleeping ' + str(WAIT))
     time.sleep(WAIT)
