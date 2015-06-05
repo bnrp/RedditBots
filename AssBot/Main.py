@@ -38,8 +38,8 @@ def scan():
         cbody = comment.body
         cid = comment.id
         
-        cauthor = comment.author
-        if cauthor is 'TheAssBot':
+        cauthor = comment.author.name
+        if cauthor.lower() is USERNAME.lower():
             continue
         
         match = re.search(SUMMONTEXT, cbody)
