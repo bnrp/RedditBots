@@ -28,7 +28,6 @@ print('Loaded SQL Database')
 sql.commit()
  
 def scan():
-    print('Searching %s.' % SUBREDDIT)
     stream = praw.helpers.comment_stream(r, 'all')
     for comment in stream:
     
