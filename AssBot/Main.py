@@ -3,7 +3,7 @@ import time
 import sqlite3
 import re
  
-SUMMONTEXT = "(\w+)-*ass\s+(\w+)" # MAKE A REGEX TO FIND A SUMMON TEXT
+SUMMONTEXT = "(\w+)-+ass\s+(\w+)" # MAKE A REGEX TO FIND A SUMMON TEXT
  
 #  Import Settings from Config.py
 try:
@@ -12,12 +12,12 @@ try:
     PASSWORD = Config.PASSWORD
     USERAGENT = Config.USERAGENT
     MAXPOSTS = Config.MAXPOSTS
-    SUBREDDIT = 'fusion_gaming'
+    SUBREDDIT = 'all'
     print("Loaded Config")
 except ImportError:
     print("Error Importing Config.py")
     
-WAIT = 5
+WAIT = 2
  
 r = praw.Reddit(USERAGENT)
 r.login(USERNAME, PASSWORD)
@@ -29,17 +29,14 @@ print('Loaded SQL Database')
 sql.commit()
  
 def scan():
-    print('Searching %s.' % SUBREDDIT)
-    subreddit = r.get_subreddit(SUBREDDIT)
-    comments = subreddit.get_comments(limit=MAXPOSTS)
-    
-    for comment in comments:
+    stream = praw.helpers.comment_stream(r, 'all')
+    for comment in stream:
     
         cbody = comment.body
         cid = comment.id
         
-        cauthor = comment.author.name
-        if cauthor.lower() is USERNAME.lower():
+        cauthor = comment.author
+        if cauthor is USERNAME:
             continue
         
         match = re.search(SUMMONTEXT, cbody)
@@ -57,13 +54,13 @@ def scan():
                 
                 print(match.group())
                 print(cbody)
-                cbody = cbody.replace(match.group() , word1+" ass-"+word2)
+                cbody = cbody.replace(match.group() ,"**"+word1+" ass-"+word2+"**")
                 print(cbody)
             else:
                 continue
                 
             print('Replying to ' + cid)
-            comment.reply(cbody)
+            comment.reply(cbody +  "\n \n \n ^[Reference](http://xkcd.com/37/)")
             
             cur.execute('INSERT INTO posts VALUES(?)', [cid])
             sql.commit()
