@@ -3,7 +3,7 @@ import time
 import sqlite3
 import re
  
-SUMMONTEXT = "\s(\w+)-*ass\s+(\w+)" # MAKE A REGEX TO FIND A SUMMON TEXT
+SUMMONTEXT = "(\w+)-*ass\s+(\w+)" # MAKE A REGEX TO FIND A SUMMON TEXT
  
 #  Import Settings from Config.py
 try:
