@@ -56,7 +56,7 @@ def scan():
                 
                 word2 = match.group(2)
                 
-                if word2 = 'it':
+                if word2 is 'it':
                     continue
                     
                 print(match.group())
