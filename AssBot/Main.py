@@ -53,9 +53,13 @@ def scan():
             #DO STUFF HERE    
             if match:
                 word1 = match.group(1)
+                
+                if word1 is 'half' or word1 is 'fat':
+                    continue
+                    
                 word2 = match.group(2)
                 
-                if word2 = 'it':
+                if word2 is 'it':
                     continue
                 
                 print(match.group())
