@@ -29,11 +29,9 @@ sql.commit()
  
 def scan():
     print('Searching %s.' % SUBREDDIT)
-    subreddit = r.get_subreddit(SUBREDDIT)
-    comments = list(subreddit.get_comments(limit=MAXPOSTS))
-    comments.reverse()
-    for comment in comments:
-        
+    stream = praw.helpers.comment_stream(r, 'all')
+    for comment in stream:
+    
         cbody = comment.body.lower()
         cid = comment.id
         
