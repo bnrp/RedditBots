@@ -55,8 +55,10 @@ def scan():
                 word1 = match.group(1)
                 word2 = match.group(2)
                 
-                print(match.group(0))
-                cbody.replace(match.group() , word1+" ass-"+word2)
+                print(match.group())
+                print(cbody)
+                cbody = cbody.replace(match.group() , word1+" ass-"+word2)
+                print(cbody)
             else:
                 continue
                 
