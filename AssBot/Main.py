@@ -1,8 +1,9 @@
 import praw # simple interface to the reddit API, also handles rate limiting of requests
 import time
 import sqlite3
+import re
  
-SUMMONTEXT = """+/u/FusionGaming\s*'([\s\S]+')\s*vs\s*'([\s\S]+')""" # MAKE A REGEX TO FIND A SUMMON TEXT
+SUMMONTEXT = (\w+)-*ass\s+(\w+) # MAKE A REGEX TO FIND A SUMMON TEXT
  
 #  Import Settings from Config.py
 try:
@@ -28,10 +29,10 @@ print('Loaded SQL Database')
 sql.commit()
  
 def scan():
-    stream = praw.helpers.comment_stream(r, 'all')
+    stream = praw.helpers.comment_stream(r, 'fusion_gaming')
     for comment in stream:
     
-        cbody = comment.body.lower()
+        cbody = comment.body
         cid = comment.id
         
                 
@@ -39,11 +40,18 @@ def scan():
         if not cur.fetchone():
             print("Found a summon comment")
             
-            #DO STUFF HERE
- 
-        
+            #DO STUFF HERE	
+			match = re.search(SUMMONTEXT, cbody)
+			if match:
+				word1 = match.group(1)
+				word2 = match.group(2)
+				
+				cbody.replace(group(0), word1+" ass-"+word2)
+			else:
+				continue
+				
             print('Replying to ' + cid)
-            comment.reply("MESSAGE")
+            comment.reply(cbody)
             
             cur.execute('INSERT INTO posts VALUES(?)', [cid])
             sql.commit()
