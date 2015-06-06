@@ -19,6 +19,8 @@ except ImportError:
     
 WAIT = 2
  
+banned_words = ['fat', 'than', 'it', 'half', 'that']
+ 
 r = praw.Reddit(USERAGENT)
 r.login(USERNAME, PASSWORD)
  
@@ -39,6 +41,9 @@ def scan():
         if cauthor is USERNAME:
             continue
         
+        if len(cbody) > 25:
+            continue
+ 
         match = re.search(SUMMONTEXT, cbody)
         if not match:
             continue
@@ -51,12 +56,12 @@ def scan():
             if match:
                 word1 = match.group(1)
                 
-                if word1 is 'fat' or word1 is 'half':
+                if word1 is in banned_words:
                     continue
                 
                 word2 = match.group(2)
                 
-                if word2 is 'it':
+                if word2 is in banned_words:
                     continue
                     
                 print(match.group())
