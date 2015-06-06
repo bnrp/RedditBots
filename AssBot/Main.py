@@ -56,12 +56,12 @@ def scan():
             if match:
                 word1 = match.group(1)
                 
-                if word1 is in banned_words:
+                if word1 in banned_words:
                     continue
                 
                 word2 = match.group(2)
                 
-                if word2 is in banned_words:
+                if word2 in banned_words:
                     continue
                     
                 print(match.group())
